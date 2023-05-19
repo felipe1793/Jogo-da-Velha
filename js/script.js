@@ -10,7 +10,7 @@ let secondPlayer;
 let player1 = 0;
 let player2 = 0;
 
-// Adicionando o evento de clicknas boxes
+// Adicionando o evento de click nas boxes
 for (let i = 0; i < boxes.length; i++) {
 
     // Quando alguém clica na caixa
@@ -25,6 +25,12 @@ for (let i = 0; i < boxes.length; i++) {
 
             if(player1 == player2) {
                 player1++;
+                if (secondPlayer == "ai-player"){
+
+                    // Função executar jogada
+                    computerPlay();
+                    player2++;
+                }
             } else {
                 player2++;
             }
@@ -33,6 +39,23 @@ for (let i = 0; i < boxes.length; i++) {
         // verifica quem venceu
         checkWinCondition();
 
+    })
+}
+
+// Evento para saber se é 2 players ou IA
+for(let i = 0; i < buttons.length; i++) {
+    
+    buttons[i].addEventListener("click", function() {
+        secondPlayer = this.getAttribute("id");
+        
+        for(let j = 0; j < buttons.length; j++) {
+            buttons[j].style.display = "none"
+        }
+
+        setTimeout(() => {
+            let container = document.querySelector("#container") ;
+            container.classList.remove("hide")
+        }, 500)
     })
 }
 
@@ -72,10 +95,10 @@ function checkWinCondition () {
 
         if (b1child == "x" && b2child == "x" && b3child == "x") {
             // x venceu 
-            console.log("É o X")
+            declareWinner("x")
         } else if (b1child == "o" && b2child == "o" && b3child == "o") {
             // O venceu 
-            console.log("É o O")
+            declareWinner("y")
         }
     }
 
@@ -87,10 +110,10 @@ function checkWinCondition () {
 
         if (b4child == "x" && b5child == "x" && b6child == "x") {
             // x venceu 
-            console.log("É o X")
+            declareWinner("x")
         } else if (b4child == "o" && b5child == "o" && b6child == "o") {
             // O venceu 
-            console.log("É o O")
+            declareWinner("y")
         }
     }
 
@@ -102,10 +125,10 @@ function checkWinCondition () {
 
         if (b7child == "x" && b8child == "x" && b9child == "x") {
             // x venceu 
-            console.log("É o X")
+            declareWinner("x")
         } else if (b7child == "o" && b8child == "o" && b9child == "o") {
             // O venceu 
-            console.log("É o O")
+            declareWinner("y")
         }
     }
 
@@ -118,12 +141,10 @@ function checkWinCondition () {
 
         if (b1child == "x" && b4child == "x" && b7child == "x") {
             // x venceu 
-
-            console.log("É o X")
+            declareWinner("x")
         } else if (b1child == "o" && b4child == "o" && b7child == "o") {
             // O venceu 
-
-            console.log("É o O")
+            declareWinner("y")
         }
     }
 
@@ -135,12 +156,10 @@ function checkWinCondition () {
 
         if (b5child == "x" && b2child == "x" && b8child == "x") {
             // x venceu 
-
-            console.log("É o X")
+            declareWinner("x")
         } else if (b5child == "o" && b2child == "o" && b8child == "o") {
             // O venceu 
-
-            console.log("É o O")
+            declareWinner("y")
         }
     }
 
@@ -152,12 +171,10 @@ function checkWinCondition () {
 
         if (b6child == "x" && b9child == "x" && b3child == "x") {
             // x venceu 
-
-            console.log("É o X")
+            declareWinner("x")
         } else if (b6child == "o" && b9child == "o" && b3child == "o") {
             // O venceu 
-
-            console.log("É o O")
+            declareWinner("y")
         }
     }
 
@@ -170,12 +187,10 @@ function checkWinCondition () {
 
         if (b1child == "x" && b5child == "x" && b9child == "x") {
             // x venceu 
-
-            console.log("É o X")
+            declareWinner("x")
         } else if (b1child == "o" && b5child == "o" && b9child == "o") {
             // O venceu 
-
-            console.log("É o O")
+            declareWinner("y")
         }
 
     }
@@ -188,12 +203,10 @@ function checkWinCondition () {
 
         if (b3child == "x" && b5child == "x" && b7child == "x") {
             // x venceu 
-
-            console.log("É o X")
+            declareWinner("x")
         } else if (b3child == "o" && b5child == "o" && b7child == "o") {
             // O venceu 
-
-            console.log("É o O")
+            declareWinner("y")
         }
     }
 
@@ -206,7 +219,72 @@ function checkWinCondition () {
         }
 
         if (couter == 9) {
-            console.log("deu Velha")
+            declareWinner("a")
         }
     }
+}
+
+// Limpa o jogo, declara o vencedor e atualiza o placar
+
+function declareWinner(winner) {
+
+    let scoreboardX = document.getElementById("scoreboard-1")
+    let scoreboardY = document.getElementById("scoreboard-2")
+    let msg
+
+    if (winner == "x") {
+        scoreboardX.textContent = parseInt(scoreboardX.textContent) + 1
+        msg = "jogador 1 Venceu"
+    }else if (winner == "y") {
+        scoreboardY.textContent = parseInt(scoreboardY.textContent) + 1
+        msg = "jogador 2 Venceu"
+    } else {
+        msg = "Deu Velha"
+    }
+
+    messageText.innerHTML = msg
+    messageContainer.classList.remove("hide")
+
+    // Esconde mensagem
+    setTimeout(() => {
+        messageContainer.classList.add("hide");
+    }, 3000);
+
+    player1 = 0;
+    player2 = 0;
+    
+    // Remove X e O
+    let boxesToRemove = document.querySelectorAll(".box div");
+
+    for(let i = 0; i < boxesToRemove.length; i++) {
+        boxesToRemove[i].parentNode.removeChild(boxesToRemove[i]);
+    }
+}
+
+// Logica da jogada da CPU
+function computerPlay() {
+
+    let cloneO = o.cloneNode(true);
+    couter = 0;
+    filled = 0; 
+
+    for(let i = 0; i < boxes.length; i++) {
+        
+        let randonNunber = Math.floor(Math.random() * 5);
+        // Só preencher se estiver vazio o filho
+        if( boxes[i].childNodes[0] == undefined) {
+            if(randonNunber <= 1) {
+                boxes[i].appendChild(cloneO);
+                couter++;
+                break;
+            }
+        // Checagem de quantas estão preenchidas
+        } else {
+            filled++
+        }
+    };
+    
+    if(couter == 0 && filled < 9){
+        computerPlay();
+    };
 }
